@@ -1,0 +1,11 @@
+{
+    "name"        : "patient-feedback-server",
+    "script"      : "/opt/patient-feedback-server/index.js",
+    "instances"       : 1,
+    "env": {
+          "NODE_ENV": "development"
+    },
+    "env_production" : {
+       "NODE_ENV": "production"
+    }
+}

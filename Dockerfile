@@ -1,26 +1,26 @@
+# FROM node:8
+
+# WORKDIR /app/amrs-patientfeedback-server
+
+# COPY package.json /app/amrs-patientfeedback-server
+
+# RUN npm install 
+
+# COPY . /app/amrs-patientfeedback-server
+
+# RUN cd /app/amrs-patientfeedback-server && npm install
+
+# CMD node index.js
+
+# EXPOSE 5900
+
+
 FROM node:8
 
-WORKDIR /app/back-end
+COPY . /opt/patient-feedback-server
 
-COPY package.json /app/back-end
+RUN cd /opt/patient-feedback-server && npm install
 
-RUN npm install 
+CMD ["node", "/opt/patient-feedback-server/index.js" ]
 
-COPY . /app/back-end
-
-RUN cd /app/back-end && npm install
-
-CMD node index.js
-
-EXPOSE 5900
-
-
-# FROM keymetrics/pm2-docker-alpine:7
-
-# COPY . /app/patient-feedack
-
-# RUN npm install -g babel-cli
-
-# RUN cd /app/patient-feedack && npm install
-
-# CMD ["pm2-docker", "start", "/app/patient-feedack/config/pm2_config.json" ]
+# EXPOSE 5900

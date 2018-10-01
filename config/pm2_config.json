@@ -1,7 +1,7 @@
 {
     "apps" : [{
-      "name"        : "back-end",
-      "script"      : "/app/back-end/index.js",
+      "name"        : "patient-feedback-server",
+      "script"      : "/app/patient-feedback-server/index.js",
       "watch"       : false,
       "exec_interpreter" : "babel-node",
       "exec_mode"        : "fork"
