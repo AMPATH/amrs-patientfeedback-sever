@@ -1,0 +1,19 @@
+{
+  "name": "feedback_server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^2.0.1",
+    "hapi": "^17.5.2",
+    "hapi-auth-basic": "^5.0.0",
+    "inert": "^5.1.0",
+    "mysql": "^2.15.0",
+    "request": "^2.87.0"
+  }
+}

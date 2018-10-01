@@ -1,0 +1,44 @@
+Create a mySQL database named patient_feedback
+
+In backend/config/config.js, change the 'user' and 'password' field of connection  to be your username and password
+
+Run this in mySQL:
+
+CREATE TABLE `surveyEncounter` (
+ `surveyEncounterId` int(11) unsigned NOT NULL AUTO_INCREMENT,
+ `surveyId` int(11) NOT NULL,
+ `location` varchar(36) NOT NULL,
+ `date` date NOT NULL,
+ `department` text NOT NULL,
+ `clinicalProgramId` int(11) NOT NULL,
+ PRIMARY KEY (`surveyEncounterId`)
+) ENGINE=InnoDB AUTO_INCREMENT=124 DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `tbl_surveys` (
+  `survey_id` int(11) AUTO_INCREMENT NOT NULL,
+  `version` varchar(50) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `survey` longtext NOT NULL,
+  `date_created` date NOT NULL,
+  `created_by` varchar(50) NOT NULL,
+  `retired` int(11) NOT NULL,
+  `date_retired` date NOT NULL,
+  `retired_by` varchar(50) NOT NULL,
+  `published` int(11) NOT NULL,
+  `description` text NOT NULL,
+     PRIMARY KEY (`survey_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE `surveyResponse`(
+`surveyResponseId`  int NOT NULL AUTO_INCREMENT ,
+`surveyEncounter_surveyEncounterId`  int NOT NULL ,
+`question`  text NULL ,
+`question_text`  text NULL ,
+`answer`  text NULL ,
+`program_uuid`  varchar(36) NULL ,
+`department_uuid`  varchar(36) NULL ,
+PRIMARY KEY (`surveyResponseId`, `surveyEncounter_surveyEncounterId`)
+)
+;
