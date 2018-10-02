@@ -1,0 +1,7 @@
+version: '3'
+services: 
+  amrs-patientfeedback-server:
+    build:
+      context: .
+    ports: 
+          - "6380:5000"

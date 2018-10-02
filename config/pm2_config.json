@@ -1,9 +1,0 @@
-{
-    "apps" : [{
-      "name"        : "patient-feedback-server",
-      "script"      : "/app/patient-feedback-server/index.js",
-      "watch"       : false,
-      "exec_interpreter" : "babel-node",
-      "exec_mode"        : "fork"
-    }]
-  }
