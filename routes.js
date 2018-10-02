@@ -73,7 +73,7 @@ function saveResponse(surveyResponse, encounterInfo) {
 }
 
 module.exports = {
-  routesFxn: (validate) => [
+  routesFxn: () => [
     {
       method: 'GET',
       path: '/',
@@ -133,7 +133,7 @@ module.exports = {
       method: 'GET',
       path: '/getLocations',
       handler: function (request, h) {
-        saveTestSurvey(rawSurvey);
+        //saveTestSurvey(rawSurvey);
         return getLocations();
       }
     },
@@ -160,16 +160,6 @@ module.exports = {
           });
         });
 
-      }
-    },
-    {
-      method: 'POST',
-      path: '/login',
-      options: {
-        auth: false
-      },
-      handler: function (request, h) {
-        return validate({}, request.payload.username, request.payload.password)
       }
     },
     {
