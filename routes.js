@@ -76,6 +76,14 @@ module.exports = {
   routesFxn: (validate) => [
     {
       method: 'GET',
+      path: '/',
+      handler: function(request, h){
+        return 'server running';
+      }
+
+    },
+    {
+      method: 'GET',
       path: '/saveSurvey',
       handler: function (request, h) {
         return service.saveSurvey(rawSurvey);

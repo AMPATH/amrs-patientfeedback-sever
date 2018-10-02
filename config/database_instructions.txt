@@ -2,6 +2,7 @@ Create a mySQL database named patient_feedback
 
 In backend/config/config.js, change the 'user' and 'password' field of connection  to be your username and password
 
+
 Run this in mySQL:
 
 CREATE TABLE `surveyEncounter` (
