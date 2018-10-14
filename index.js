@@ -3,7 +3,6 @@
 const Hapi = require('hapi');
 const routes = require('./routes');
 const config = require('./config/config');
-const connection = require('./connection/connection');
 
 const server = Hapi.Server({
   port: config.application.port,
@@ -26,7 +25,3 @@ const init = async () => {
 
 init();
 
-process.on('SIGINT', () => {
-  connection.end();
-  process.exit();
-});

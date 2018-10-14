@@ -7,23 +7,19 @@ var def = {
     executeQuery: executeQuery
 };
 
+
 module.exports = def;
 
 function executeQuery(query) {
     return new Promise((resolve, reject) => {
-        pool.getConnection((err, connection) => {
-            if(err) {
-                connection.release();
-                reject(err);
+        pool.query(query, (err, rows) => {
+            if (!err) {
+                resolve(rows);
                 return;
+            } else {
+                throw err;
             }
-            connection.query(query, (err, rows) => {
-                connection.release();
-                if (!err) {
-                    resolve(rows);
-                    return;
-                }
-            });
         });
+
     });
 }
