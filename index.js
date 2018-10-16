@@ -4,6 +4,7 @@ const Hapi = require('hapi');
 const routes = require('./routes');
 const config = require('./config/config');
 
+
 const server = Hapi.Server({
   port: config.application.port,
   host: config.application.host,
@@ -12,16 +13,20 @@ const server = Hapi.Server({
   }
 });
 
+for (var route of routes.routesFxn()) {
+  server.route(route);
+}
 
 const init = async () => {
 
-  for (var route of routes.routesFxn()) {
-    server.route(route);
-  }
-
   await server.start();
-  console.log('Server is running');
-}
+  console.log(`Server running at: ${server.info.uri}`);
+};
+
+process.on('unhandledRejection', (err) => {
+
+  console.log(err);
+  process.exit(1);
+});
 
 init();
-

@@ -4,7 +4,7 @@ const request = require('request');
 const connection = require('./connection/connection');
 const programs = require('./data/department-programs.json');
 const service = require('./data/service');
-const  rawSurvey = require('./data/surveys.json');
+const rawSurvey = require('./data/surveys.json');
 
 function getAllDeparts() {
   var data = programs;
@@ -17,71 +17,73 @@ function onlyUnique(value, index, self) {
 
 function getSurveys(selected_uuids, surveyId) {
   return service.getSurveysObject(selected_uuids, surveyId)
-  .then((result,err) => {
-    if(result){
-      return result;
-    }else{
-      console.log('error', err);
-    }
-  });
+    .then((result, err) => {
+      if (result) {
+        return result;
+      } else {
+        console.log('error', err);
+      }
+    });
 }
 
 function getSurveyPrograms(surveyId) {
   return service.getSurveyPrograms(surveyId)
-  .then((result,err) => {
-    if(result){
-      return result;
-    }else{
-      console.log('error', err);
-    }
-  });
+    .then((result, err) => {
+      if (result) {
+        return result;
+      } else {
+        console.log('error', err);
+      }
+    });
 }
 
 function getDepartments(surveyId) {
   return service.getDepartments(surveyId)
-  .then((result,err) => {
-    if(result){
-      return result;
-    }else{
-      console.log('error', err);
-    }
-  });
+    .then((result, err) => {
+      if (result) {
+        return result;
+      } else {
+        console.log('error', err);
+      }
+    });
 }
 
 function getQuizes(programId) {
   return service.getQuizes(programId)
-  .then((result,err) => {
-    if(result){
-      return result;
-    }else{
-      console.log('error', err);
-    }
-  });
+    .then((result, err) => {
+      if (result) {
+        return result;
+      } else {
+        console.log('error', err);
+      }
+    });
 }
 
 function getAnswers(programID) {
   return service.getAnswers(programID)
-  .then((result,err) => {
-    if(result){
-      return result;
-    }else{
-      console.log('error', err);
-    }
-  });
+    .then((result, err) => {
+      if (result) {
+        return result;
+      } else {
+        console.log('error', err);
+      }
+    });
 }
 
 function getLocations() {
   var loc_data = [];
   let locations = service.LOCATIONS;
-  locations.results.forEach((val)=>{
-    loc_data.push({uuid:val.uuid, name:val.display});
+  locations.results.forEach((val) => {
+    loc_data.push({ uuid: val.uuid, name: val.display });
   })
+  console.log('returned locations');
   return loc_data;
 }
 
-function saveTestSurvey(data){
+function saveTestSurvey(data) {
   return service.saveSurvey(data);
 }
+
 function saveEncounter(surveyEncounterInfo) {
   return new Promise((resolve, reject) => {
     let query = service.surveyEncounter_query_constructor(surveyEncounterInfo);
@@ -97,6 +99,7 @@ function saveEncounter(surveyEncounterInfo) {
   })
 
 }
+
 function saveResponse(surveyResponse, encounterInfo) {
   var response = new Promise((resolve, reject) => {
     saveEncounter(encounterInfo).then((res) => {
@@ -119,7 +122,7 @@ module.exports = {
     {
       method: 'GET',
       path: '/',
-      handler: function(request, h){
+      handler: function (request, h) {
         return 'server running';
       }
 
@@ -129,7 +132,6 @@ module.exports = {
       path: '/saveSurvey',
       handler: function (request, h) {
         return service.saveSurvey(rawSurvey);
-        //return service.saveSurvey(surveys22);
       }
     },
     {
@@ -175,7 +177,7 @@ module.exports = {
       method: 'GET',
       path: '/getLocations',
       handler: function (request, h) {
-        //saveTestSurvey(rawSurvey);
+        // return saveTestSurvey(rawSurvey);
         return getLocations();
       }
     },
@@ -184,12 +186,10 @@ module.exports = {
       path: '/getSurveys',
       handler: function (request, h) {
         var selectedIds = request.payload;
-        
-let ids = ["334c9e98-173f-4454-a8ce-f80b20b7fdf0", "e48b266e-4d80-41f8-a56a-a8ce5449ebc6"];
-       // var unique = selectedIds.filter(onlyUnique);
-        console.log('selected ids', selectedIds);
-        console.log(' ids', ids);
-        return getSurveys(ids, 1);
+
+        let ids = ["334c9e98-173f-4454-a8ce-f80b20b7fdf0", "e48b266e-4d80-41f8-a56a-a8ce5449ebc6"];
+        var unique = selectedIds.filter(onlyUnique);
+        return getSurveys(selectedIds, 1);
       }
     },
     {

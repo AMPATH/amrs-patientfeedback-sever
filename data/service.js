@@ -1,4 +1,4 @@
-const conn = require('../connection/connection');
+const connection = require('../connection/connection');
 const programs = require('./department-programs.json');
 const locations = require('./locations.json');
 
@@ -59,6 +59,7 @@ function getSurveysObject(selected_uuids, surveyId) {
       resolve(finalData);
     }).catch(function (err) {
       console.log('getSurveysObject error', err);
+      reject(err);
     });
   })
 }
@@ -95,6 +96,7 @@ function getSurveyPrograms(surveyId) {
       resolve(allPrograms);
     }).catch(function (err) {
       console.log('getSurveyPrograms error', err);
+      reject(err);
     });
   })
 }
@@ -113,14 +115,16 @@ function getDepartments(surveyId) {
       resolve(value);
     }).catch(function (err) {
       console.log('getDepartments error', err);
+      reject(err);
     });
   })
 }
 
 function getSurveys(id) {
   return new Promise((resolve, reject) => {
-    conn.executeQuery('SELECT * FROM ' + SURVEYS_TABLE + ' WHERE survey_id= "' + id + '"', (err, results, fields) => {
+    connection.executeQuery('SELECT * FROM ' + SURVEYS_TABLE + ' WHERE survey_id= "' + id + '"', (err, results, fields) => {
       if (err) {
+        console.log('get surveys erros', err);
         reject(err);
       } else {
         var data = results[0];
@@ -146,7 +150,7 @@ function getSurveys(id) {
 function saveSurvey(data) {
   var rawData = JSON.stringify(data);
   return new Promise((resolve, reject) => {
-    conn.executeQuery("INSERT INTO " + SURVEYS_TABLE + "  (`version`, `name`, `survey`, `date_created`, `created_by`, `retired`, `date_retired`, `retired_by`, `published`, `description`)" +
+    connection.executeQuery("INSERT INTO " + SURVEYS_TABLE + "  (`version`, `name`, `survey`, `date_created`, `created_by`, `retired`, `date_retired`, `retired_by`, `published`, `description`)" +
       "VALUES ('1.0.1', 'test', ? , '2018-09-24', 'jess', 1, '2018-09-24', 'jess', 1, 'test survey')", rawData, (err, success) => {
         if (err) {
           console.log('saveSurvey error', err);
@@ -160,9 +164,10 @@ function saveSurvey(data) {
 
 function getQuizes(programId) {
   return new Promise((resolve, reject) => {
-    conn.executeQuery("SELECT * FROM " + RESPONSE_TABLE + " WHERE program_uuid IN ('" + programId + "') GROUP BY question", (err, results, programId) => {
+    connection.executeQuery("SELECT * FROM " + RESPONSE_TABLE + " WHERE program_uuid IN ('" + programId + "') GROUP BY question", (err, results, programId) => {
       if (err) {
-        reject('getQuizes error', err);
+        console.log('get quizes error', err);
+        reject(err);
       } else {
         var querry_data = [];
         for (var i = 0; i < results.length; i++) {
@@ -180,9 +185,10 @@ function getQuizes(programId) {
 
 function getAnswers(programID) {
   return new Promise((resolve, reject) => {
-    conn.executeQuery("SELECT question, answer, question_text, COUNT(answer) as counts FROM " + RESPONSE_TABLE + "  WHERE program_uuid IN  ('" + programID + "') GROUP BY question, answer ORDER BY counts desc ", (err, results, fields) => {
+    connection.executeQuery("SELECT question, answer, question_text, COUNT(answer) as counts FROM " + RESPONSE_TABLE + "  WHERE program_uuid IN  ('" + programID + "') GROUP BY question, answer ORDER BY counts desc ", (err, results, fields) => {
       if (err) {
-        reject('getAnswers error', err);
+        console.log('get answers', err);
+        reject(err);
       } else {
         var querry_data = [];
         for (var i = 0; i < results.length; i++) {

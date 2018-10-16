@@ -7,19 +7,16 @@ var def = {
     executeQuery: executeQuery
 };
 
-
 module.exports = def;
 
 function executeQuery(query) {
     return new Promise((resolve, reject) => {
-        pool.query(query, (err, rows) => {
-            if (!err) {
-                resolve(rows);
-                return;
-            } else {
+        pool.query(query, function (err, rows, fields) {
+            if (err) {
                 throw err;
+            } else {
+                resolve(rows)
             }
         });
-
     });
 }
