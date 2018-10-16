@@ -11,19 +11,12 @@ module.exports = def;
 
 function executeQuery(query) {
     return new Promise((resolve, reject) => {
-        pool.getConnection((err, connection) => {
-            if(err) {
-                connection.release();
-                reject(err);
-                return;
+        pool.query(query, function (err, rows, fields) {
+            if (err) {
+                throw err;
+            } else {
+                resolve(rows)
             }
-            connection.query(query, (err, rows) => {
-                connection.release();
-                if (!err) {
-                    resolve(rows);
-                    return;
-                }
-            });
         });
     });
 }

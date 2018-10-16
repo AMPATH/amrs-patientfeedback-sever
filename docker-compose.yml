@@ -1,7 +1,8 @@
 version: '3'
-services: 
+services:
   amrs-patientfeedback-server:
+    restart: on-failure
     build:
       context: .
-    ports: 
-          - "6381:5000"
+    ports:
+          - "6381:5100"
