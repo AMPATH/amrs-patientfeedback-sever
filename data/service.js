@@ -93,6 +93,7 @@ function getSurveyPrograms(surveyId) {
           }
         })
       })
+      console.log('service res', allPrograms);
       resolve(allPrograms);
     }).catch(function (err) {
       console.log('getSurveyPrograms error', err);
@@ -122,53 +123,36 @@ function getDepartments(surveyId) {
 
 function getSurveys(id) {
   return new Promise((resolve, reject) => {
-    connection.executeQuery('SELECT * FROM ' + SURVEYS_TABLE + ' WHERE survey_id= "' + id + '"', (err, results, fields) => {
-      if (err) {
-        console.log('get surveys erros', err);
-        reject(err);
-      } else {
+    connection.executeQuery('SELECT * FROM ' + SURVEYS_TABLE + ' WHERE survey_id= "' + id + '"')
+      .then((results) => {
         var data = results[0];
-        /*var returnData = {
-            id: data.survey_id,
-            version: data.version,
-            name: data.name,
-            survey: JSON.parse(data.survey),
-            date_created: data.date_created,
-            created_by: data.created_by,
-            retired: data.retired,
-            date_retired: data.date_retired,
-            retired_by: data.retired_by,
-            published: data.published,
-            description: data.description
-        }*/
         resolve(JSON.parse(data.survey));
-      }
-    });
-  });
+      }).catch((err) => {
+        console.log('error', err);
+        reject(err);
+      })
+  })
 }
 
 function saveSurvey(data) {
   var rawData = JSON.stringify(data);
   return new Promise((resolve, reject) => {
     connection.executeQuery("INSERT INTO " + SURVEYS_TABLE + "  (`version`, `name`, `survey`, `date_created`, `created_by`, `retired`, `date_retired`, `retired_by`, `published`, `description`)" +
-      "VALUES ('1.0.1', 'test', ? , '2018-09-24', 'jess', 1, '2018-09-24', 'jess', 1, 'test survey')", rawData, (err, success) => {
-        if (err) {
-          console.log('saveSurvey error', err);
-          reject(err);
-        } else {
-          resolve(success);
-        }
-      });
+      "VALUES ('1.0.1', 'test', ? , '2018-09-24', 'jess', 1, '2018-09-24', 'jess', 1, 'test survey')", rawData)
+      .then((success) => {
+        resolve(success);
+      })
+      .catch((err) => {
+        console.log('error', err);
+        reject(err);
+      })
   });
 }
 
 function getQuizes(programId) {
   return new Promise((resolve, reject) => {
-    connection.executeQuery("SELECT * FROM " + RESPONSE_TABLE + " WHERE program_uuid IN ('" + programId + "') GROUP BY question", (err, results, programId) => {
-      if (err) {
-        console.log('get quizes error', err);
-        reject(err);
-      } else {
+    connection.executeQuery("SELECT * FROM " + RESPONSE_TABLE + " WHERE program_uuid IN ('" + programId + "') GROUP BY question")
+      .then((results) => {
         var querry_data = [];
         for (var i = 0; i < results.length; i++) {
           var data = results[i];
@@ -177,19 +161,18 @@ function getQuizes(programId) {
           });
         }
         resolve(querry_data);
-      }
-
-    });
-  });
+      })
+      .catch((err) => {
+        console.log('errors getquizes', err);
+        reject(err);
+      })
+  })
 }
 
 function getAnswers(programID) {
   return new Promise((resolve, reject) => {
-    connection.executeQuery("SELECT question, answer, question_text, COUNT(answer) as counts FROM " + RESPONSE_TABLE + "  WHERE program_uuid IN  ('" + programID + "') GROUP BY question, answer ORDER BY counts desc ", (err, results, fields) => {
-      if (err) {
-        console.log('get answers', err);
-        reject(err);
-      } else {
+    connection.executeQuery("SELECT question, answer, question_text, COUNT(answer) as counts FROM " + RESPONSE_TABLE + "  WHERE program_uuid IN  ('" + programID + "') GROUP BY question, answer ORDER BY counts desc ")
+      .then((results) => {
         var querry_data = [];
         for (var i = 0; i < results.length; i++) {
           var data = results[i];
@@ -201,8 +184,11 @@ function getAnswers(programID) {
           });
         }
         resolve(querry_data);
-      }
-    })
+      })
+      .catch((err) => {
+        console.log('errors get answers', err);
+        reject(err);
+      })
   })
 }
 const data = {

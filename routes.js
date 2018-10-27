@@ -11,63 +11,69 @@ function getAllDeparts() {
   return data;
 }
 
-function onlyUnique(value, index, self) {
-  return self.indexOf(value) === index;
+function testSurvey(surveyId) {
+  return service.getSurveys(surveyId)
+    .then((result) => {
+      return result;
+    })
+    .catch((err) => {
+      console.log('error surveys', err);
+      return err;
+    })
 }
-
 function getSurveys(selected_uuids, surveyId) {
   return service.getSurveysObject(selected_uuids, surveyId)
-    .then((result, err) => {
-      if (result) {
-        return result;
-      } else {
-        console.log('error', err);
-      }
-    });
+    .then((result) => {
+      return result;
+    })
+    .catch((err) => {
+      console.log('error surveys', err);
+      return err;
+    })
 }
 
 function getSurveyPrograms(surveyId) {
   return service.getSurveyPrograms(surveyId)
-    .then((result, err) => {
-      if (result) {
-        return result;
-      } else {
-        console.log('error', err);
-      }
-    });
+    .then((result) => {
+      return result;
+    })
+    .catch((err) => {
+      console.log('error surveys', err);
+      return err;
+    })
 }
 
 function getDepartments(surveyId) {
   return service.getDepartments(surveyId)
-    .then((result, err) => {
-      if (result) {
-        return result;
-      } else {
-        console.log('error', err);
-      }
-    });
+    .then((result) => {
+      return result;
+    })
+    .catch((err) => {
+      console.log('error surveys', err);
+      return err;
+    })
 }
 
 function getQuizes(programId) {
   return service.getQuizes(programId)
-    .then((result, err) => {
-      if (result) {
-        return result;
-      } else {
-        console.log('error', err);
-      }
-    });
+    .then((result) => {
+      return result;
+    })
+    .catch((err) => {
+      console.log('error surveys', err);
+      return err;
+    })
 }
 
 function getAnswers(programID) {
   return service.getAnswers(programID)
-    .then((result, err) => {
-      if (result) {
-        return result;
-      } else {
-        console.log('error', err);
-      }
-    });
+    .then((result) => {
+      return result;
+    })
+    .catch((err) => {
+      console.log('error surveys', err);
+      return err;
+    })
 }
 
 function getLocations() {
@@ -94,6 +100,7 @@ function saveEncounter(surveyEncounterInfo) {
         resolve(0);
       }
     }).catch((err) => {
+      console.log('save encounter error', err);
       reject(err);
     });
   })
@@ -122,37 +129,37 @@ module.exports = {
     {
       method: 'GET',
       path: '/',
-      handler: function (request, h) {
-        return 'server running';
+      handler: function (request, reply) {
+        reply('server running');
       }
 
     },
     {
       method: 'GET',
       path: '/saveSurvey',
-      handler: function (request, h) {
-        return service.saveSurvey(rawSurvey);
+      handler: function (request, reply) {
+        reply(service.saveSurvey(rawSurvey));
       }
     },
     {
       method: 'GET',
       path: '/getDepts',
-      handler: function (request, h) {
-        return getAllDeparts();
+      handler: function (request, reply) {
+        reply(getAllDeparts());
       }
     },
     {
       method: 'GET',
       path: '/getSurveyPrograms',
-      handler: function (request, h) {
-        return getSurveyPrograms(1);
+      handler: function (request, reply) {
+        reply(getSurveyPrograms(1));
       }
     },
     {
       method: 'GET',
       path: '/programsJsonSchema',
-      handler: function (request, h) {
-        return getDepartments(1);
+      handler: function (request, reply) {
+        reply(getDepartments(1));
       }
     },
     {
@@ -160,7 +167,7 @@ module.exports = {
       path: '/getQuestions',
       handler: function (request, reply) {
         let selectedIds = request.payload;
-        return getQuizes(selectedIds);
+        reply(getQuizes(selectedIds));
 
       }
     },
@@ -169,27 +176,40 @@ module.exports = {
       path: '/getAll',
       handler: function (request, reply) {
         let selectedIds = request.payload;
-        return getAnswers(selectedIds);
+        reply(getAnswers(selectedIds));
 
       }
     },
     {
       method: 'GET',
       path: '/getLocations',
-      handler: function (request, h) {
+      handler: function (request, reply) {
         // return saveTestSurvey(rawSurvey);
-        return getLocations();
+        reply(getLocations());
       }
     },
     {
       method: 'POST',
       path: '/getSurveys',
-      handler: function (request, h) {
+      handler: function (request, reply) {
         var selectedIds = request.payload;
-
         let ids = ["334c9e98-173f-4454-a8ce-f80b20b7fdf0", "e48b266e-4d80-41f8-a56a-a8ce5449ebc6"];
-        var unique = selectedIds.filter(onlyUnique);
-        return getSurveys(selectedIds, 1);
+        getSurveys(ids, 1).then((data) => {
+          return reply(data);
+        })
+          .catch((err) => {
+            console.log('err', err);
+          })
+      }
+    },
+    {
+      method: 'POST',
+      path: '/testSurveys',
+      handler: function (request, reply) {
+        var selectedIds = request.payload;
+        let ids = ["334c9e98-173f-4454-a8ce-f80b20b7fdf0", "e48b266e-4d80-41f8-a56a-a8ce5449ebc6"];
+
+        reply(testSurvey(1));
       }
     },
     {
@@ -205,16 +225,15 @@ module.exports = {
             reject(err);
           });
         });
-
       }
     },
     {
       method: 'GET',
       path: '/logout',
-      options: {
+      config: {
         auth: false
       },
-      handler: function (req, h) {
+      handler: function (req, reply) {
         return new Promise(
           (resolve, reject) => {
             const callback = (_error, _response, _body) => '';
