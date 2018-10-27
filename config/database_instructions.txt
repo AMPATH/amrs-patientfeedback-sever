@@ -5,6 +5,29 @@ In backend/config/config.js, change the 'user' and 'password' field of connectio
 
 Run this in mySQL:
 
+CREATE TABLE products (
+product_id int AUTO_INCREMENT,
+product_name varchar(50) NOT NULL,
+product_price varchar(50) NOT NULL,
+PRIMARY KEY(product_id) )
+
+CREATE TABLE customers(
+customer_id int AUTO_INCREMENT,
+customer_name varchar(50) NOT NULL,
+customer_phone varchar(50) NOT NULL,
+PRIMARY KEY(customer_id) )
+
+CREATE TABLE orders(
+order_id int AUTO_INCREMENT,
+customer_id int NOT NULL,
+product_id int NOT NULL,
+product_quantity int NOT NULL,
+order_date varchar(50) NOT NULL,
+PRIMARY KEY(order_id),
+FOREIGN KEY customer_id REFERENCES customers(customer_id),
+FOREIGN KEY product_id REFERENCES products(product_id),
+ )
+
 CREATE TABLE `surveyEncounter` (
  `surveyEncounterId` int(11) unsigned NOT NULL AUTO_INCREMENT,
  `surveyId` int(11) NOT NULL,

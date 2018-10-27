@@ -14,7 +14,6 @@ function getAllDeparts() {
 function testSurvey(surveyId) {
   return service.getSurveys(surveyId)
     .then((result) => {
-      console.log('result', result);
       return result;
     })
     .catch((err) => {
@@ -153,7 +152,6 @@ module.exports = {
       method: 'GET',
       path: '/getSurveyPrograms',
       handler: function (request, reply) {
-        console.log('surveys routes');
         reply(getSurveyPrograms(1));
       }
     },
@@ -197,7 +195,6 @@ module.exports = {
         var selectedIds = request.payload;
         let ids = ["334c9e98-173f-4454-a8ce-f80b20b7fdf0", "e48b266e-4d80-41f8-a56a-a8ce5449ebc6"];
         getSurveys(ids, 1).then((data) => {
-          console.log('data', data);
           return reply(data);
         })
           .catch((err) => {

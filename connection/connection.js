@@ -18,7 +18,6 @@ function executeQuery(query) {
             }
             connection.query(query, (err, rows) => {
                 connection.release();
-                console.log('connection released');
                 if (!err) {
                     resolve(rows);
                 }
